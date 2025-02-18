@@ -1,0 +1,43 @@
+﻿@model List<WebRemate.Models.ProductoViewModel>
+
+@{
+    ViewData["Title"] = "Productos en Remate";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Productos en Remate</h2>
+
+    @if (ViewData["Error"] != null)
+    {
+        <div class="alert alert-danger">@ViewData["Error"]</div>
+    }
+
+    @if (Model.Count == 0)
+    {
+        <p class="text-muted">No hay productos disponibles en este remate.</p>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var producto in Model)
+            {
+                <div class="col-md-4">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">@producto.Titulo</h5>
+                            <p class="card-text">@producto.Descripcion</p>
+                            <p class="fw-bold">Precio Base: $@producto.PrecioBase</p>
+
+
+
+                            <img src="@producto.Imagen" alt="Imagen del producto" class="card-img-top" />
+
+
+                            <a href="@Url.Action("Detalle", "Producto", new { id = producto.IdRemate })" class="btn btn-primary">Ver Detalle</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

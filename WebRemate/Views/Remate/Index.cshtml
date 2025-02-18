@@ -1,0 +1,67 @@
+﻿@model List<WebRemate.Models.RemateViewModels>
+<div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+        <div class="carousel-item active" data-bs-interval="10000">
+            <img src="~/imagenes/imagenCasa.jpg" class="d-block w-100" alt="Subasta Exclusiva de Terrenos y Casas">
+            <div class="carousel-caption d-none d-md-block">
+                <h5 style="color:#000099">Subasta Exclusiva de Terrenos y Casas</h5>
+            </div>
+        </div>
+        <div class="carousel-item" data-bs-interval="2000">
+            <img src="~/imagenes/imagesAutos.jpg" class="d-block w-100" alt="Subasta de Autos">
+            <div class="carousel-caption d-none d-md-block">
+                <h5 style="color:#000099">Subasta de Autos de Oportunidad - Vehículos en Excelente Estado</h5>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img src="~/imagenes/imagenesMuebles.jpg" class="d-block w-100" alt="Subasta de Muebles">
+            <div class="carousel-caption d-none d-md-block">
+                <h5 style="color:#000099">Subasta de Muebles de Estilo y Calidad</h5>
+            </div>
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Anterior</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Siguiente</span>
+    </button>
+</div>
+
+<div class="card text-primary mt-4">
+
+    <div class="container-fluid" style="margin: 10px;">
+        <div class="mb-4">
+            <h4 class="text-center" style="color:#000099">Todos los remates</h4>
+            <div class="row">
+                @foreach (var remate in Model)
+                {
+                    <div class="card" style="width: 18rem;">
+                        <img src="~/imagenes/LOGO.png" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">@remate.Titulo</h5>
+                            <p class="card-text">@remate.Descripcion</p>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Categoria:@remate.Categoria</li>
+                            <li class="list-group-item">Fecha de cierre:@remate.FechaCierre.ToString("dd/MM/yyyy")</li>
+                            <li class="list-group-item">Estado:@remate.Estado</li>
+                        </ul>
+                        <div class="card-body">
+                            <a asp-controller="Producto" asp-action="ProductosPorRemate" asp-route-idRemate="@remate.IdRemate" class="card-link">Ver más</a>
+                            <a asp-controller="Producto" asp-action="Publicar" asp-route-idRemate="@remate.IdRemate" class="card-link">Publicar productos</a>
+                        </div>
+                    </div>
+                }
+            </div>
+
+        </div>
+    </div>
+</div>

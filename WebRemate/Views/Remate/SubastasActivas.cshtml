@@ -1,0 +1,24 @@
+﻿@model List<WebRemate.Models.RemateViewModels>
+
+
+<h2>Remates Activos</h2>
+
+@foreach (var remate in Model)
+{
+    <div class="card" style="width: 18rem;">
+            <img src="~/imagenes/LOGO.png" class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title">@remate.Titulo</h5>
+            <p class="card-text">@remate.Descripcion</p>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">Categoria:@remate.Categoria</li>
+            <li class="list-group-item">Fecha de cierre:@remate.FechaCierre.ToString("dd/MM/yyyy")</li>
+            <li class="list-group-item">Estado:@remate.Estado</li>
+        </ul>
+        <div class="card-body">
+            <a href="#" class="card-link">Ver más</a>
+            <a href="#" class="card-link">Publicar productos</a>
+        </div>
+    </div>
+}

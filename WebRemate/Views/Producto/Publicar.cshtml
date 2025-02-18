@@ -1,0 +1,20 @@
+﻿@model ProductoViewModel
+
+<form asp-action="Publicar" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="IdRemate" />
+    <input type="hidden" asp-for="IdUsuario" />
+
+    <label for="Titulo">Título:</label>
+    <input type="text" asp-for="Titulo" required />
+
+    <label for="Descripcion">Descripción:</label>
+    <textarea asp-for="Descripcion" required></textarea>
+
+    <label for="PrecioBase">Precio Base:</label>
+    <input type="number" asp-for="PrecioBase" required />
+
+    <label for="Imagen">Imagen del producto:</label>
+    <input type="file" asp-for="Imagen" required />
+
+    <button type="submit">Publicar Producto</button>
+</form>
