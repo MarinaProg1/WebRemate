@@ -85,16 +85,7 @@ public class ProductoApiService : IProductoApiService
         return await response.Content.ReadFromJsonAsync<List<ProductoViewModel>>();
     }
 
-    //public async Task<bool> PublicarProducto(ProductoViewModel producto)
-    //{
-    //    AgregarTokenAutenticacion();
-
-    //    var json = JsonSerializer.Serialize(producto);
-    //    var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-    //    var response = await _httpClient.PostAsync($"{_apiUrl}/Producto/publicar", content);
-    //    return response.IsSuccessStatusCode;
-    //}
+   
 
     public async Task<bool> PublicarProducto(ProductoViewModel producto)
     {
@@ -106,6 +97,7 @@ public class ProductoApiService : IProductoApiService
         formData.Add(new StringContent(producto.Titulo), "Titulo");
         formData.Add(new StringContent(producto.Descripcion), "Descripcion");
         formData.Add(new StringContent(producto.PrecioBase.ToString()), "PrecioBase");
+     
         formData.Add(new StringContent(producto.IdRemate.ToString()), "IdRemate");
         formData.Add(new StringContent(producto.IdUsuario.ToString()), "IdUsuario");
 

@@ -29,9 +29,10 @@
                             <p class="fw-bold">Precio Base: $@producto.PrecioBase</p>
 
 
+                            <img src="@producto.Imagen" alt="Imagen del producto" class="img-fluid" />
 
-                            <img src="@producto.Imagen" alt="Imagen del producto" class="card-img-top" />
 
+                      
 
                             <a href="@Url.Action("Detalle", "Producto", new { id = producto.IdRemate })" class="btn btn-primary">Ver Detalle</a>
                         </div>

@@ -1,20 +1,39 @@
 ﻿@model ProductoViewModel
 
-<form asp-action="Publicar" method="post" enctype="multipart/form-data">
-    <input type="hidden" asp-for="IdRemate" />
-    <input type="hidden" asp-for="IdUsuario" />
+<h1 class="text-center" style="color:#000099;">Crear Producto</h1>
 
-    <label for="Titulo">Título:</label>
-    <input type="text" asp-for="Titulo" required />
+<div class="form-container">
 
-    <label for="Descripcion">Descripción:</label>
-    <textarea asp-for="Descripcion" required></textarea>
+    <form asp-action="Publicar" method="post" enctype="multipart/form-data">
 
-    <label for="PrecioBase">Precio Base:</label>
-    <input type="number" asp-for="PrecioBase" required />
+        <input type="hidden" asp-for="IdRemate" />
+        <input type="hidden" asp-for="IdUsuario" />
+        <div class="form-group">
+            <label asp-for="Titulo"></label>
+            <input asp-for="Titulo" class="form-control" required />
+            <span asp-validation-for="Titulo" class="text-danger"></span>
+        </div>
 
-    <label for="Imagen">Imagen del producto:</label>
-    <input type="file" asp-for="Imagen" required />
+        <div class="form-group">
+            <label asp-for="Descripcion"></label>
+            <textarea asp-for="Descripcion" class="form-control" required></textarea>
+            <span asp-validation-for="Descripcion" class="text-danger"></span>
+        </div>
 
-    <button type="submit">Publicar Producto</button>
-</form>
+        <div class="form-group">
+            <label asp-for="PrecioBase"></label>
+            <input asp-for="PrecioBase" class="form-control" step="0.01" required />
+            <span asp-validation-for="PrecioBase" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Imagen"></label>
+            <input asp-for="Imagen" type="file" class="form-control" accept="image/*" required />
+            <span asp-validation-for="Imagen" class="text-danger"></span>
+        </div>
+        <br />
+        <button type="submit" class="btn-outline-primary w-50 mt-3 mx-auto d-block">Publicar Producto</button>
+        
+    </form>
+
+  </div>

@@ -111,6 +111,13 @@ builder.Services.AddAuthentication(options =>
     options.LoginPath = "/Autenticacion/Login"; // Ruta para redirigir al login si no está autenticado
     options.LogoutPath = "/Autenticacion/Logout"; // Ruta para cerrar sesión
     options.AccessDeniedPath = "/Home/AccessDenied"; // Ruta de acceso denegado
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(30); // La sesión dura 30 minutos
+    options.SlidingExpiration = false; // No extiende la expiración con actividad
+    options.Cookie.IsEssential = true;
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SameSite = SameSiteMode.Lax;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.None; 
+
 })
 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
 {
