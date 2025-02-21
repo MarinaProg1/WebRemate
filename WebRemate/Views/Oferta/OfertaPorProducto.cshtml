@@ -1,0 +1,47 @@
+﻿@model List<MostrarOfertaViewModel>
+
+<h2>Detalle de Ofertas</h2>
+
+@if (ViewBag.MensajeError != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.MensajeError
+    </div>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>N° Ofertas Obtenidas</th>
+            <th>Usuario</th>
+            <th>Fecha</th>
+            <th>Monto de Oferta</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            int contador = 1;
+            foreach (var oferta in Model)
+            {
+                <tr>
+                    <td>@contador</td>
+                    <td>@oferta.NombreUsuario</td>
+                    <td>@oferta.Fecha</td>
+                    <td>
+                        @* Siempre mostramos el mensaje "Oferta no visible" en lugar del monto *@
+                        <span class="text-muted">Oferta no visible</span>
+                    </td>
+                </tr>
+                contador++;
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4" class="text-center text-danger">No se encontraron ofertas.</td>
+            </tr>
+        }
+    </tbody>
+</table>

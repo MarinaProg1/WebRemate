@@ -1,44 +1,38 @@
-﻿@model List<WebRemate.Models.ProductoViewModel>
+﻿@using Microsoft.IdentityModel.Tokens
+
+
+@model List<WebRemate.Models.ProductoViewModel>
 
 @{
     ViewData["Title"] = "Productos en Remate";
 }
 
-<div class="container mt-4">
-    <h2 class="mb-4">Productos en Remate</h2>
 
-    @if (ViewData["Error"] != null)
-    {
-        <div class="alert alert-danger">@ViewData["Error"]</div>
-    }
 
-    @if (Model.Count == 0)
+<h1 class="text-center" style="color:#000099;">Productos del Remate</h1>
+
+<div class="form-container">
+    @foreach (var producto in Model)
     {
-        <p class="text-muted">No hay productos disponibles en este remate.</p>
-    }
-    else
-    {
-        <div class="row">
-            @foreach (var producto in Model)
-            {
+
+        <div class="card mb-3" style="max-width: 540px;">
+            <div class="row g-0">
                 <div class="col-md-4">
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <h5 class="card-title">@producto.Titulo</h5>
-                            <p class="card-text">@producto.Descripcion</p>
-                            <p class="fw-bold">Precio Base: $@producto.PrecioBase</p>
+                    <img src="@producto.Imagen" class="img-fluid rounded-start" alt="@producto.Titulo">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">@producto.Titulo</h5>
+                        <p class="card-text">Descripción: @producto.Descripcion</p>
+                        <p class="card-text">Precio base: @producto.PrecioBase</p>
 
-
-                            <img src="@producto.Imagen" alt="Imagen del producto" class="img-fluid" />
-
-
-                      
-
-                            <a href="@Url.Action("Detalle", "Producto", new { id = producto.IdRemate })" class="btn btn-primary">Ver Detalle</a>
-                        </div>
+                        <a asp-controller="Oferta" asp-action="OfertaPorProducto" asp-route-idProducto="@producto.IdProducto" class="card-link">Ver más</a>
+                        <a asp-controller="Oferta" asp-action="Oferta" asp-route-idProducto="@producto.IdProducto" class="card-link">Realizar Oferta</a>
+                        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
                     </div>
                 </div>
-            }
+            </div>
         </div>
     }
 </div>
+

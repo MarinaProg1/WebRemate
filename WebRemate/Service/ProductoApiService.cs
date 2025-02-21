@@ -47,6 +47,7 @@ using System.Text.Json;
 using System.Net.Http.Headers;
 using WebRemate.Interfaces;
 using WebRemate.Models;
+using Newtonsoft.Json;
 
 public class ProductoApiService : IProductoApiService
 {
@@ -73,21 +74,19 @@ public class ProductoApiService : IProductoApiService
     }
 
    
-
-
     public async Task<List<ProductoViewModel>> ObtenerProductosPorRemate(int idRemate)
     {
         AgregarTokenAutenticacion();
-
         var response = await _httpClient.GetAsync($"{_apiUrl}/Producto/por-remate/{idRemate}");
-        if (!response.IsSuccessStatusCode) return null;
-
-        return await response.Content.ReadFromJsonAsync<List<ProductoViewModel>>();
+        if (response.IsSuccessStatusCode)
+        {
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<List<ProductoViewModel>>(json);
+        }
+        return new List<ProductoViewModel>();
     }
 
-   
-
-    public async Task<bool> PublicarProducto(ProductoViewModel producto)
+    public async Task<bool> PublicarProducto(CrearProductoViewModel producto)
     {
         AgregarTokenAutenticacion();
 

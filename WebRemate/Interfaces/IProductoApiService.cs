@@ -4,7 +4,7 @@ namespace WebRemate.Interfaces
 {
     public interface IProductoApiService
     {
-        Task<bool> PublicarProducto(ProductoViewModel producto);
+        Task<bool> PublicarProducto(CrearProductoViewModel producto);
         Task<List<ProductoViewModel>> ObtenerProductosPorRemate(int idRemate);
 
     }

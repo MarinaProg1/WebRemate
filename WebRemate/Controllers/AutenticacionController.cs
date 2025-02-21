@@ -34,7 +34,7 @@ namespace WebRemate.Controllers
                 {
                     var claims = new List<Claim>
                     {
-                        new Claim(ClaimTypes.Name, model.Email),
+                        new Claim(ClaimTypes.Email, model.Email),
                         new Claim("Token", tokenResponse.token)
                     };
 
@@ -72,13 +72,16 @@ namespace WebRemate.Controllers
                 bool success = await _usuarioApiService.Registrarse(modelo);
                 if (success)
                 {
-                    return RedirectToAction("Login");
+                    TempData["Exito"] = "¡Registro exitoso! Ahora puedes <a href='/Autenticacion/Login'>iniciar sesión</a>.";
+                    return View(modelo); // Permanece en la misma vista para mostrar el mensaje
                 }
 
-                ModelState.AddModelError(string.Empty, "Hubo un problema al registrar el usuario.");
+                TempData["Error"] = "Hubo un problema al registrar el usuario.";
             }
 
             return View(modelo);
         }
+
+
     }
 }

@@ -1,0 +1,43 @@
+﻿@model OfertaViewModel
+@if (TempData["Exito"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Exito"]
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+
+<div class="card mb-3">
+    <img src="~/imagenes/RemateImag.png" class="card-img-top w-25" alt="imagen remate">
+
+    <div class="card-body">
+        <h3>Realizá tu oferta</h3>
+        <p class="card-text">
+            <h4>Condiciones:</h4></br>
+            La oferta debe superar el monto base publicado.</br>
+            Una vez finalizado el tiempo del remate, se publicarán los ganadores.<br>
+            La oferta es irrevocable y no puede ser cancelada.</br></br>
+            <h5>¡No dejes pasar esta oportunidad!</h5>
+            Haz tu oferta ahora y asegura tu lugar como el mejor postor. ¡Cada segundo cuenta!
+        </p>
+        <form asp-action="Oferta" method="post">
+            <input type="hidden" asp-for="IdProducto" />
+            <input type="hidden" asp-for="IdUsuario" />
+            
+            <div class="form-group">
+                <label for="MontoOferta">Monto de la Oferta:</label>
+                <input type="number" asp-for="Monto" class="form-control" required />
+            </div>
+
+            <br/>
+
+            <button type="submit" class="btn btn-primary">Enviar Oferta</button>
+        </form>
+    </div>
+</div>

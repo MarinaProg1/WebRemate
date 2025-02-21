@@ -93,6 +93,7 @@ var configuration = builder.Configuration;
 builder.Services.AddHttpClient<IUsuarioApiService, UsuarioApiService>();
 builder.Services.AddHttpClient<IRemateApiService, RemateApiService>();
 builder.Services.AddHttpClient<IProductoApiService, ProductoApiService>();
+builder.Services.AddHttpClient<IOfertaApiService, OfertaApiService>();
 
 // Agregar servicios
 builder.Services.AddControllersWithViews();
