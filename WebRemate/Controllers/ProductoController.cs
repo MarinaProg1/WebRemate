@@ -17,6 +17,7 @@ public class ProductoController : Controller
     public ProductoController(IProductoApiService productoApiService, IHttpContextAccessor httpContextAccessor)
     {
         _productoApiService = productoApiService;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     [HttpGet]

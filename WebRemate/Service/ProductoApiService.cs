@@ -1,54 +1,11 @@
-﻿//using Microsoft.AspNetCore.Http;
-//using Newtonsoft.Json;
-//using System.Net.Http.Headers;
-//using WebRemate.Models;
-//using WebRemate.Interfaces;
-//using System.Net.Http;
-//using System.Text;
-
-//namespace WebRemate.Service
-//{
-//    public class ProductoApiService : IProductoApiService
-//    {
-//        private readonly HttpClient _httpClient;
-//        private readonly string _baseUrl;
-
-//        public ProductoApiService(HttpClient httpClient, IConfiguration configuration)
-//        {
-//            _httpClient = httpClient;
-//            _baseUrl = configuration["ApiUrl"];
-//        }
-//        public async Task<List<ProductoViewModel>> ObtenerProductosPorRemate(int idRemate)
-//        {
-
-//            var response = await _httpClient.GetAsync($"{_baseUrl}/Producto/por-remate/{idRemate}");
-
-//            if (!response.IsSuccessStatusCode)
-//                return new List<ProductoViewModel>();
-
-//            var json = await response.Content.ReadAsStringAsync();
-//            return JsonConvert.DeserializeObject<List<ProductoViewModel>>(json);
-//        }
-
-//        public async Task<bool> PublicarProducto(ProductoViewModel producto)
-//        {
-//            var json = JsonConvert.SerializeObject(producto);
-//            var content = new StringContent(json, Encoding.UTF8, "application/json");
-//            var response = await _httpClient.PostAsync($"{_baseUrl}/producto/publicar", content);
-
-//            return response.IsSuccessStatusCode;
-//        }
-//    }
-
-
-//}
+﻿
 using System.Text;
 using System.Text.Json;
 using System.Net.Http.Headers;
 using WebRemate.Interfaces;
 using WebRemate.Models;
 using Newtonsoft.Json;
-
+using System.Text.Json;
 public class ProductoApiService : IProductoApiService
 {
     private readonly HttpClient _httpClient;
@@ -66,14 +23,54 @@ public class ProductoApiService : IProductoApiService
     {
 
         var token = _httpContextAccessor.HttpContext?.Request.Cookies["jwt_token"];
-       // var token = _httpContextAccessor.HttpContext?.Session.GetString("jwt_token");
+    
         if (!string.IsNullOrEmpty(token))
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",token);
         }
     }
 
-   
+
+
+    //public async Task<List<ProductoViewModel>> ObtenerProductosPorRemate(int idRemate)
+    //{
+    //    AgregarTokenAutenticacion();
+    //    var response = await _httpClient.GetAsync($"{_apiUrl}/Producto/por-remate/{idRemate}");
+    //    if (response.IsSuccessStatusCode)
+    //    {
+    //        var json = await response.Content.ReadAsStringAsync();
+    //        var productos = System.Text.Json.JsonSerializer.Deserialize<List<ProductoViewModel>>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+    //        if (productos != null)
+    //        {
+    //            foreach (var producto in productos)
+    //            {
+    //                if (!string.IsNullOrEmpty(producto.Imagen))
+    //                {
+    //                    // Construir la URL completa de la imagen
+    //                    producto.Imagen = $"{_apiUrl}/Producto/imagen/{Path.GetFileName(producto.Imagen)}";
+    //                }
+    //                else
+    //                {
+    //                    Console.WriteLine("Imagen no encontrada o nula para el producto: " + producto.IdProducto);
+    //                    // Opcional: Asignar una imagen predeterminada si no hay imagen
+    //                    producto.Imagen = "/imagenes/LOGO.png"; // Asegúrate de que esta ruta sea correcta
+    //                }
+    //            }
+    //        }
+    //        else
+    //        {
+    //            Console.WriteLine("Error al deserializar la respuesta JSON.");
+    //        }
+
+    //        return productos ?? new List<ProductoViewModel>();
+    //    }
+    //    else
+    //    {
+    //        Console.WriteLine($"Error en la API: {response.StatusCode} - {await response.Content.ReadAsStringAsync()}"); // Imprime el error de la API
+    //    }
+    //    return new List<ProductoViewModel>();
+    //}
     public async Task<List<ProductoViewModel>> ObtenerProductosPorRemate(int idRemate)
     {
         AgregarTokenAutenticacion();
@@ -81,11 +78,38 @@ public class ProductoApiService : IProductoApiService
         if (response.IsSuccessStatusCode)
         {
             var json = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<List<ProductoViewModel>>(json);
+            var productos = System.Text.Json.JsonSerializer.Deserialize<List<ProductoViewModel>>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+            if (productos != null)
+            {
+                foreach (var producto in productos)
+                {
+                    // Verifica si la URL de la imagen no está vacía
+                    if (!string.IsNullOrEmpty(producto.Imagenes))
+                    {
+                     // No es necesario modificar la URL, ya viene completa desde la API
+                    }
+                    else
+                    {
+                        Console.WriteLine("Imagen no encontrada o nula para el producto: " + producto.IdProducto);
+                        // Opcional: Asignar una imagen predeterminada si no hay imagen
+                        producto.Imagenes = "/imagenes/LOGO.png"; // Asegúrate de que esta ruta sea correcta
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine("Error al deserializar la respuesta JSON.");
+            }
+
+            return productos ?? new List<ProductoViewModel>();
+        }
+        else
+        {
+            Console.WriteLine($"Error en la API: {response.StatusCode} - {await response.Content.ReadAsStringAsync()}"); // Imprime el error de la API
         }
         return new List<ProductoViewModel>();
     }
-
     public async Task<bool> PublicarProducto(CrearProductoViewModel producto)
     {
         AgregarTokenAutenticacion();
@@ -96,16 +120,16 @@ public class ProductoApiService : IProductoApiService
         formData.Add(new StringContent(producto.Titulo), "Titulo");
         formData.Add(new StringContent(producto.Descripcion), "Descripcion");
         formData.Add(new StringContent(producto.PrecioBase.ToString()), "PrecioBase");
-     
         formData.Add(new StringContent(producto.IdRemate.ToString()), "IdRemate");
         formData.Add(new StringContent(producto.IdUsuario.ToString()), "IdUsuario");
+        
 
         // Agregar la imagen si existe
-        if (producto.Imagen != null && producto.Imagen.Length > 0)
+        if (producto.Imagenes != null && producto.Imagenes.Length > 0)
         {
-            var streamContent = new StreamContent(producto.Imagen.OpenReadStream());
-            streamContent.Headers.ContentType = new MediaTypeHeaderValue(producto.Imagen.ContentType);
-            formData.Add(streamContent, "Imagen", producto.Imagen.FileName);
+            var streamContent = new StreamContent(producto.Imagenes.OpenReadStream());
+            streamContent.Headers.ContentType = new MediaTypeHeaderValue(producto.Imagenes.ContentType);
+            formData.Add(streamContent, "Imagen", producto.Imagenes.FileName);
         }
 
         var response = await _httpClient.PostAsync($"{_apiUrl}/Producto/publicar", formData);

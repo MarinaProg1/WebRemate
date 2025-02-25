@@ -17,15 +17,11 @@ namespace WebRemate.Models
         [Range(0.01, double.MaxValue, ErrorMessage = "El precio debe ser mayor que 0")]
         public decimal PrecioBase { get; set; }
 
-        // Propiedad para recibir la imagen desde el formulario
-        [Required(ErrorMessage = "Debe seleccionar una imagen")]
-        public IFormFile Imagen { get; set; }
+       
+        public string Imagenes { get; set; }
         public string? Estado { get; set; }
-
         [Required(ErrorMessage = "Debe seleccionar un remate")]
         public int IdRemate { get; set; }
-
-        // Este ID debería asignarse automáticamente desde el usuario autenticado
         public int IdUsuario { get; set; }
     }
 }

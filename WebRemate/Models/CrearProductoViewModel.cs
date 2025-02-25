@@ -17,7 +17,7 @@ namespace WebRemate.Models
 
         // Propiedad para recibir la imagen desde el formulario
         [Required(ErrorMessage = "Debe seleccionar una imagen")]
-        public IFormFile Imagen { get; set; }
+        public IFormFile Imagenes { get; set; }
 
         [Required(ErrorMessage = "Debe seleccionar un remate")]
         public int IdRemate { get; set; }

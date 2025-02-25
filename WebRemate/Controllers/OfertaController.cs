@@ -12,7 +12,7 @@ namespace WebRemate.Controllers
     {
         private readonly IOfertaApiService _ofertaApiService;
         private readonly IHttpContextAccessor _httpContextAccessor;
-
+       
         public OfertaController(IOfertaApiService ofertaApiService, IHttpContextAccessor httpContextAccessor)
         {
             _ofertaApiService = ofertaApiService;
@@ -104,20 +104,33 @@ namespace WebRemate.Controllers
 
             }
 
-        [HttpPost]
-        public async Task<IActionResult> SeleccionarGanadora(int idProducto)
+        [HttpGet]
+        public async Task<IActionResult> SeleccionarGanadora()
         {
-            var (Exito, Mensaje, Factura) = await _ofertaApiService.SeleccionarOfertaGanadora(idProducto);
+            // Aquí puedes agregar la lógica que necesites para obtener el estado actual
+            // de las ofertas y productos si es necesario.
 
-            if (Exito)
-            {
-                ViewBag.Mensaje = Mensaje;
-                return View("FacturaGenerada", Factura);
-            }
-
-            ViewBag.Error = Mensaje;
-            return View("Error");
+            return View();
         }
 
+        //[HttpPost]
+        //public async Task<IActionResult> SeleccionarGanadora(int idProducto)
+        //{
+        //    var (Exito, Mensaje, Factura) = await _ofertaApiService.SeleccionarOfertaGanadora(idProducto);
+
+        //    if (Exito)
+        //    {
+        //        ViewBag.Mensaje = Mensaje;
+        //        return View("FacturaGenerada", Factura);
+        //    }
+
+        //    ViewBag.Error = Mensaje;
+        //    return View("Error");
+        //}
+
+
+        
+
+
     }
-    }
+}
