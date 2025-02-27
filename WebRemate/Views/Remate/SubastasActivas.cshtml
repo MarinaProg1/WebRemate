@@ -6,7 +6,7 @@
 @foreach (var remate in Model)
 {
     <div class="card" style="width: 18rem;">
-            <img src="~/imagenes/LOGO.png" class="card-img-top" alt="...">
+        <img src="~/imagenes/LOGO.png" class="card-img-top" alt="...">
         <div class="card-body">
             <h5 class="card-title">@remate.Titulo</h5>
             <p class="card-text">@remate.Descripcion</p>
@@ -17,8 +17,8 @@
             <li class="list-group-item">Estado:@remate.Estado</li>
         </ul>
         <div class="card-body">
-            <a href="#" class="card-link">Ver más</a>
-            <a href="#" class="card-link">Publicar productos</a>
+            <a asp-controller="Producto" asp-action="ProductosPorRemate" asp-route-idRemate="@remate.IdRemate" class="card-link">Ver más</a>
+            <a asp-controller="Producto" asp-action="Publicar" asp-route-idRemate="@remate.IdRemate" class="card-link">Publicar productos</a>
         </div>
     </div>
 }

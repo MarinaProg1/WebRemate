@@ -23,93 +23,57 @@ public class ProductoApiService : IProductoApiService
     {
 
         var token = _httpContextAccessor.HttpContext?.Request.Cookies["jwt_token"];
-    
+
         if (!string.IsNullOrEmpty(token))
         {
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",token);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         }
     }
-
-
-
-    //public async Task<List<ProductoViewModel>> ObtenerProductosPorRemate(int idRemate)
-    //{
-    //    AgregarTokenAutenticacion();
-    //    var response = await _httpClient.GetAsync($"{_apiUrl}/Producto/por-remate/{idRemate}");
-    //    if (response.IsSuccessStatusCode)
-    //    {
-    //        var json = await response.Content.ReadAsStringAsync();
-    //        var productos = System.Text.Json.JsonSerializer.Deserialize<List<ProductoViewModel>>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-
-    //        if (productos != null)
-    //        {
-    //            foreach (var producto in productos)
-    //            {
-    //                if (!string.IsNullOrEmpty(producto.Imagen))
-    //                {
-    //                    // Construir la URL completa de la imagen
-    //                    producto.Imagen = $"{_apiUrl}/Producto/imagen/{Path.GetFileName(producto.Imagen)}";
-    //                }
-    //                else
-    //                {
-    //                    Console.WriteLine("Imagen no encontrada o nula para el producto: " + producto.IdProducto);
-    //                    // Opcional: Asignar una imagen predeterminada si no hay imagen
-    //                    producto.Imagen = "/imagenes/LOGO.png"; // Asegúrate de que esta ruta sea correcta
-    //                }
-    //            }
-    //        }
-    //        else
-    //        {
-    //            Console.WriteLine("Error al deserializar la respuesta JSON.");
-    //        }
-
-    //        return productos ?? new List<ProductoViewModel>();
-    //    }
-    //    else
-    //    {
-    //        Console.WriteLine($"Error en la API: {response.StatusCode} - {await response.Content.ReadAsStringAsync()}"); // Imprime el error de la API
-    //    }
-    //    return new List<ProductoViewModel>();
-    //}
     public async Task<List<ProductoViewModel>> ObtenerProductosPorRemate(int idRemate)
     {
         AgregarTokenAutenticacion();
         var response = await _httpClient.GetAsync($"{_apiUrl}/Producto/por-remate/{idRemate}");
+
         if (response.IsSuccessStatusCode)
         {
             var json = await response.Content.ReadAsStringAsync();
-            var productos = System.Text.Json.JsonSerializer.Deserialize<List<ProductoViewModel>>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-            if (productos != null)
+            // Verificar si el JSON contiene una lista o un mensaje
+            if (json.Contains("message"))
             {
-                foreach (var producto in productos)
-                {
-                    // Verifica si la URL de la imagen no está vacía
-                    if (!string.IsNullOrEmpty(producto.Imagenes))
-                    {
-                     // No es necesario modificar la URL, ya viene completa desde la API
-                    }
-                    else
-                    {
-                        Console.WriteLine("Imagen no encontrada o nula para el producto: " + producto.IdProducto);
-                        // Opcional: Asignar una imagen predeterminada si no hay imagen
-                        producto.Imagenes = "/imagenes/LOGO.png"; // Asegúrate de que esta ruta sea correcta
-                    }
-                }
+                var mensaje = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, object>>(json);
+                Console.WriteLine(mensaje["message"]);
+                return new List<ProductoViewModel>(); // Retornar lista vacía
             }
             else
             {
-                Console.WriteLine("Error al deserializar la respuesta JSON.");
-            }
+                var productos = System.Text.Json.JsonSerializer.Deserialize<List<ProductoViewModel>>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-            return productos ?? new List<ProductoViewModel>();
+                if (productos != null)
+                {
+                    foreach (var producto in productos)
+                    {
+                        if (string.IsNullOrEmpty(producto.Imagenes))
+                        {
+                            producto.Imagenes = "/imagenes/LOGO.png";
+                        }
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Error al deserializar la respuesta JSON.");
+                }
+
+                return productos ?? new List<ProductoViewModel>();
+            }
         }
         else
         {
-            Console.WriteLine($"Error en la API: {response.StatusCode} - {await response.Content.ReadAsStringAsync()}"); // Imprime el error de la API
+            Console.WriteLine($"Error en la API: {response.StatusCode} - {await response.Content.ReadAsStringAsync()}");
         }
         return new List<ProductoViewModel>();
     }
+
     public async Task<bool> PublicarProducto(CrearProductoViewModel producto)
     {
         AgregarTokenAutenticacion();
@@ -122,7 +86,7 @@ public class ProductoApiService : IProductoApiService
         formData.Add(new StringContent(producto.PrecioBase.ToString()), "PrecioBase");
         formData.Add(new StringContent(producto.IdRemate.ToString()), "IdRemate");
         formData.Add(new StringContent(producto.IdUsuario.ToString()), "IdUsuario");
-        
+
 
         // Agregar la imagen si existe
         if (producto.Imagenes != null && producto.Imagenes.Length > 0)
@@ -136,5 +100,9 @@ public class ProductoApiService : IProductoApiService
         return response.IsSuccessStatusCode;
     }
 
+    
+
 }
+
+
 

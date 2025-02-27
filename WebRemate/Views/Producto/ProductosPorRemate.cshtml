@@ -1,24 +1,19 @@
 ﻿@using Microsoft.IdentityModel.Tokens
 
-
 @model List<WebRemate.Models.ProductoViewModel>
 
 @{
     ViewData["Title"] = "Productos en Remate";
 }
 
-
-
 <h1 class="text-center" style="color:#000099;">Productos del Remate</h1>
 
 <div class="form-container">
     @foreach (var producto in Model)
     {
-
-        <div class="card mb-3" style="max-width: 540px;">
+        <div class="card mb-3" style="max-width: 500px;">
             <div class="row g-0">
                 <div class="col-md-4">
-
                     <img src="@producto.Imagenes" class="img-fluid rounded-start" alt="@producto.Titulo">
                 </div>
                 <div class="col-md-8">
@@ -28,7 +23,20 @@
                         <p class="card-text">Precio base: @producto.PrecioBase</p>
 
                         <a asp-controller="Oferta" asp-action="OfertaPorProducto" asp-route-idProducto="@producto.IdProducto" class="card-link">Ver más</a>
-                        <a asp-controller="Oferta" asp-action="Oferta" asp-route-idProducto="@producto.IdProducto" class="card-link">Realizar Oferta</a>
+
+                        @if (ViewBag.EstadoRemate == "cerrado")
+                        {
+                            
+
+                            <a class="badge bg-secondary" asp-controller="Remate" asp-action="CalcularOfertaGanadora" asp-route-idProducto="@producto.IdProducto">
+                                Oferta Ganadora
+                            </a>
+                        }
+                        else
+                        {
+                            <a asp-controller="Oferta" asp-action="Oferta" asp-route-idProducto="@producto.IdProducto" class="card-link">Realizar Oferta</a>
+                        }
+
                         <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
                     </div>
                 </div>
@@ -36,4 +44,3 @@
         </div>
     }
 </div>
-

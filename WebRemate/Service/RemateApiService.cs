@@ -27,16 +27,60 @@ namespace WebRemate.Service
             return JsonConvert.DeserializeObject<List<RemateViewModels>>(responseBody) ?? new List<RemateViewModels>();
         }
 
-        // Obtener todos los remates
         public async Task<List<RemateViewModels>> ObtenerTodosLosRemates()
         {
             var response = await _httpClient.GetAsync($"{_baseUrl}/remates/todos");
 
-            if (!response.IsSuccessStatusCode)
+            // Si la respuesta es 404 Not Found, devuelve una lista vacía
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
                 return new List<RemateViewModels>();
+            }
 
-            var responseBody = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<List<RemateViewModels>>(responseBody) ?? new List<RemateViewModels>();
+            // Si la respuesta es exitosa (200 OK)
+            if (response.IsSuccessStatusCode)
+            {
+                var responseBody = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<List<RemateViewModels>>(responseBody) ?? new List<RemateViewModels>();
+            }
+
+            // En caso de error, lanza una excepción
+            throw new Exception($"Error al obtener los remates: {response.ReasonPhrase}");
         }
+
+        public async Task<RemateViewModels> ObtenerRematePorId(int idRemate)
+        {
+            var response = await _httpClient.GetAsync($"{_baseUrl}/remates/{idRemate}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<RemateViewModels>(json);
+            }
+
+            return null;
+        }
+
+        public async Task<GanadorViewModel> CalcularOfertaGanadoraPorProducto(int idProducto)
+        {
+            var response = await _httpClient.PostAsync($"{_baseUrl}/remates/calcular-oferta-ganadora/{idProducto}", null);
+
+            // Si la respuesta es exitosa (200 OK)
+            if (response.IsSuccessStatusCode)
+            {
+                var responseBody = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<GanadorViewModel>(responseBody);
+            }
+
+            // Si la respuesta es 404 Not Found
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return null;
+            }
+
+            // Si hay un error interno en el servidor
+            throw new Exception($"Error al calcular la oferta ganadora: {response.ReasonPhrase}");
+        }
+
     }
 }

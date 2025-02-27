@@ -16,8 +16,16 @@ namespace WebRemate.Controllers
         public async Task<IActionResult> Index()
         {
             var remates = await _remateApiService.ObtenerTodosLosRemates();
+
+            // Verifica si la lista está vacía
+            if (remates == null || !remates.Any())
+            {
+                ViewBag.Mensaje = "No hay remates disponibles en este momento.";
+            }
+
             return View(remates);
         }
+
 
         [HttpGet]
         public async Task<IActionResult> SubastasActivas()
@@ -25,5 +33,28 @@ namespace WebRemate.Controllers
             var remates = await _remateApiService.ObtenerSubastasActivas();
             return View(remates);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> CalcularOfertaGanadora(int idProducto)
+        {
+            try
+            {
+                var ganador = await _remateApiService.CalcularOfertaGanadoraPorProducto(idProducto);
+
+                if (ganador == null)
+                {
+                    ViewBag.Mensaje = "No hay oferta ganadora para este producto.";
+                    return View("SinGanador");
+                }
+
+                return View("Ganador", ganador);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = ex.Message;
+                return View("Error");
+            }
+        }
     }
 }
+

@@ -1,4 +1,9 @@
-﻿@model List<WebRemate.Models.RemateViewModels>
+﻿
+@model List<WebRemate.Models.RemateViewModels>
+@if (ViewBag.Mensaje != null)
+{
+    <p>@ViewBag.Mensaje</p>
+}
 <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
     <div class="carousel-indicators">
         <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
@@ -36,12 +41,16 @@
 </div>
 
 <div class="card text-primary mt-4">
-
     <div class="container-fluid" style="margin: 10px;">
         <div class="mb-4">
             <h4 class="text-center" style="color:#000099">Todos los remates</h4>
             <div class="row">
-                @foreach (var remate in Model)
+                @{
+                    var rematesActivos = Model.Where(r => r.Estado != "cerrado").ToList();
+                    var rematesCerrados = Model.Where(r => r.Estado == "cerrado").ToList();
+                }
+
+                @foreach (var remate in rematesActivos.Concat(rematesCerrados))
                 {
                     <div class="card" style="width: 18rem;">
                         <img src="~/imagenes/LOGO.png" class="card-img-top" alt="...">
@@ -50,18 +59,25 @@
                             <p class="card-text">@remate.Descripcion</p>
                         </div>
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item">Categoria:@remate.Categoria</li>
-                            <li class="list-group-item">Fecha de cierre:@remate.FechaCierre.ToString("dd/MM/yyyy")</li>
-                            <li class="list-group-item">Estado:@remate.Estado</li>
+                            <li class="list-group-item">Categoria: @remate.Categoria</li>
+                            <li class="list-group-item">Fecha de cierre: @remate.FechaCierre.ToString("dd/MM/yyyy")</li>
+                            <li class="list-group-item">Estado: @remate.Estado</li>
                         </ul>
-                        <div class="card-body">
+                        <div class="card-body d-flex justify-content-start align-items-center">
                             <a asp-controller="Producto" asp-action="ProductosPorRemate" asp-route-idRemate="@remate.IdRemate" class="card-link">Ver más</a>
-                            <a asp-controller="Producto" asp-action="Publicar" asp-route-idRemate="@remate.IdRemate" class="card-link">Publicar productos</a>
+                            @if (remate.Estado != "cerrado")
+                            {
+                                <a asp-controller="Producto" asp-action="Publicar" asp-route-idRemate="@remate.IdRemate" class="card-link">Publicar productos</a>
+                            }
+                            else
+                            {
+                              <span style="color:red; margin-left: 10px; font-weight: bold;">     CERRADO!!!</span>
+                            }
                         </div>
+
                     </div>
                 }
             </div>
-
         </div>
     </div>
 </div>

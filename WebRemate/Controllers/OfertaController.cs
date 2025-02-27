@@ -113,24 +113,6 @@ namespace WebRemate.Controllers
             return View();
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> SeleccionarGanadora(int idProducto)
-        //{
-        //    var (Exito, Mensaje, Factura) = await _ofertaApiService.SeleccionarOfertaGanadora(idProducto);
-
-        //    if (Exito)
-        //    {
-        //        ViewBag.Mensaje = Mensaje;
-        //        return View("FacturaGenerada", Factura);
-        //    }
-
-        //    ViewBag.Error = Mensaje;
-        //    return View("Error");
-        //}
-
-
-        
-
 
     }
 }

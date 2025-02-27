@@ -8,25 +8,50 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System;
 using System.IO;
+using WebRemate.Service;
 
 [Authorize]
 public class ProductoController : Controller
 {
     private readonly IProductoApiService _productoApiService;
     private readonly IHttpContextAccessor _httpContextAccessor;
-    public ProductoController(IProductoApiService productoApiService, IHttpContextAccessor httpContextAccessor)
+   private readonly IRemateApiService _remateApiService; 
+    public ProductoController(IProductoApiService productoApiService, IHttpContextAccessor httpContextAccessor, IRemateApiService remateApiService)
     {
         _productoApiService = productoApiService;
         _httpContextAccessor = httpContextAccessor;
+        _remateApiService = remateApiService;   
     }
+
+    //[HttpGet]
+    //public async Task<IActionResult> ProductosPorRemate(int idRemate)
+    //{
+    //    if (!User.Identity.IsAuthenticated || User.Identity == null)
+    //    {
+    //        return Challenge();
+    //    }
+
+    //    var productos = await _productoApiService.ObtenerProductosPorRemate(idRemate);
+
+    //    if (productos == null || !productos.Any())
+    //    {
+    //        ViewBag.ErrorMessage = "No hay productos en este remate.";
+    //        return View("Error");
+    //    }
+
+    //    // Obtener el estado del remate
+    //    var remate = await _remateApiService.ObtenerRematePorId(idRemate);
+    //    ViewBag.EstadoRemate = remate?.Estado ?? "Desconocido";
+
+    //    return View(productos);
+    //}
 
     [HttpGet]
     public async Task<IActionResult> ProductosPorRemate(int idRemate)
     {
-        // Si el usuario no está autenticado, forzar login
         if (!User.Identity.IsAuthenticated || User.Identity == null)
         {
-            return Challenge(); // Redirige automáticamente al login
+            return Challenge();
         }
 
         var productos = await _productoApiService.ObtenerProductosPorRemate(idRemate);
@@ -34,8 +59,11 @@ public class ProductoController : Controller
         if (productos == null || !productos.Any())
         {
             ViewBag.ErrorMessage = "No hay productos en este remate.";
-            return View("Error"); // Vista personalizada para errores
+            return View("SinProductos"); // Vista específica para cuando no hay productos
         }
+
+        var remate = await _remateApiService.ObtenerRematePorId(idRemate);
+        ViewBag.EstadoRemate = remate?.Estado ?? "Desconocido";
 
         return View(productos);
     }
