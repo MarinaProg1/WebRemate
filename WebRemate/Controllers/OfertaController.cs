@@ -45,7 +45,7 @@ namespace WebRemate.Controllers
             var model = new OfertaViewModel
             {
                 IdProducto = idProducto,
-                IdUsuario = idUsuario
+                IdUsuario = idUsuario,
             };
 
             return View(model);
@@ -86,13 +86,18 @@ namespace WebRemate.Controllers
             if (exito)
             {
                 TempData["Exito"] = mensaje; // Mensaje de éxito
-                return View(model); // Permanece en la misma vista
+
+                // Redirigir al método GET para evitar el reenvío del formulario
+                return RedirectToAction("Oferta", new { idProducto = model.IdProducto });
             }
 
             // Si hay un error, mostrar el mensaje
             TempData["Error"] = mensaje; // Mensaje de error
-            return View(model);
+
+            // Redirigir al método GET para recargar la vista sin datos de formulario
+            return RedirectToAction("Oferta", new { idProducto = model.IdProducto });
         }
+
 
 
 

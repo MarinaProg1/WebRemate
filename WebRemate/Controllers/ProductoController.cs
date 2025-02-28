@@ -23,28 +23,7 @@ public class ProductoController : Controller
         _remateApiService = remateApiService;   
     }
 
-    //[HttpGet]
-    //public async Task<IActionResult> ProductosPorRemate(int idRemate)
-    //{
-    //    if (!User.Identity.IsAuthenticated || User.Identity == null)
-    //    {
-    //        return Challenge();
-    //    }
 
-    //    var productos = await _productoApiService.ObtenerProductosPorRemate(idRemate);
-
-    //    if (productos == null || !productos.Any())
-    //    {
-    //        ViewBag.ErrorMessage = "No hay productos en este remate.";
-    //        return View("Error");
-    //    }
-
-    //    // Obtener el estado del remate
-    //    var remate = await _remateApiService.ObtenerRematePorId(idRemate);
-    //    ViewBag.EstadoRemate = remate?.Estado ?? "Desconocido";
-
-    //    return View(productos);
-    //}
 
     [HttpGet]
     public async Task<IActionResult> ProductosPorRemate(int idRemate)
@@ -64,9 +43,11 @@ public class ProductoController : Controller
 
         var remate = await _remateApiService.ObtenerRematePorId(idRemate);
         ViewBag.EstadoRemate = remate?.Estado ?? "Desconocido";
+        ViewBag.FechaInicio = remate?.FechaInicio.ToString("dd/MM/yyyy") ?? "No especificada";
 
         return View(productos);
     }
+
 
     [HttpGet]
     public IActionResult Publicar(int idRemate)
@@ -98,7 +79,7 @@ public class ProductoController : Controller
             }
 
             // Crear el modelo con los valores preasignados
-            var model = new ProductoViewModel
+            var model = new CrearProductoViewModel
             {
                 IdRemate = idRemate,
                 IdUsuario = idUsuario
@@ -111,6 +92,7 @@ public class ProductoController : Controller
             return Challenge(); // Si hay un error, redirigir al login
         }
     }
+
     [HttpPost]
     public async Task<IActionResult> Publicar(CrearProductoViewModel model)
     {
@@ -147,8 +129,13 @@ public class ProductoController : Controller
             return View(model);
         }
 
-        return RedirectToAction("ProductosPorRemate", new { idRemate = model.IdRemate });
+      
+        TempData["PublicacionExitosa"] = "¡El producto se publicó exitosamente!";
+        ModelState.Clear();  
+
+        return RedirectToAction("Publicar"); 
     }
+
 
 
 }

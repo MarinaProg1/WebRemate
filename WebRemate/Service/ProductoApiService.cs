@@ -93,7 +93,7 @@ public class ProductoApiService : IProductoApiService
         {
             var streamContent = new StreamContent(producto.Imagenes.OpenReadStream());
             streamContent.Headers.ContentType = new MediaTypeHeaderValue(producto.Imagenes.ContentType);
-            formData.Add(streamContent, "Imagen", producto.Imagenes.FileName);
+            formData.Add(streamContent, "Imagenes", producto.Imagenes.FileName);
         }
 
         var response = await _httpClient.PostAsync($"{_apiUrl}/Producto/publicar", formData);

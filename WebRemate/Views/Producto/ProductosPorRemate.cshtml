@@ -1,4 +1,5 @@
-﻿@using Microsoft.IdentityModel.Tokens
+﻿
+ @using Microsoft.IdentityModel.Tokens
 
 @model List<WebRemate.Models.ProductoViewModel>
 
@@ -11,7 +12,7 @@
 <div class="form-container">
     @foreach (var producto in Model)
     {
-        <div class="card mb-3" style="max-width: 500px;">
+        <div class="card mb-3" style="max-width: 600px;">
             <div class="row g-0">
                 <div class="col-md-4">
                     <img src="@producto.Imagenes" class="img-fluid rounded-start" alt="@producto.Titulo">
@@ -26,18 +27,20 @@
 
                         @if (ViewBag.EstadoRemate == "cerrado")
                         {
-                            
-
                             <a class="badge bg-secondary" asp-controller="Remate" asp-action="CalcularOfertaGanadora" asp-route-idProducto="@producto.IdProducto">
                                 Oferta Ganadora
                             </a>
+                        }
+                        else if (ViewBag.EstadoRemate == "preparacion" || producto.Estado == "pendiente")
+                        {
+                            <span class="text-muted">
+                                Para ofertas se activará el: @ViewBag.FechaInicio
+                            </span>
                         }
                         else
                         {
                             <a asp-controller="Oferta" asp-action="Oferta" asp-route-idProducto="@producto.IdProducto" class="card-link">Realizar Oferta</a>
                         }
-
-                        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
                     </div>
                 </div>
             </div>

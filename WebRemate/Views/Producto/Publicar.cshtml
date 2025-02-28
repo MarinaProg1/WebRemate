@@ -1,4 +1,11 @@
-﻿@model ProductoViewModel
+﻿@model CrearProductoViewModel
+
+@if (TempData["PublicacionExitosa"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["PublicacionExitosa"]
+    </div>
+}
 
 <h1 class="text-center" style="color:#000099;">Crear Producto</h1>
 

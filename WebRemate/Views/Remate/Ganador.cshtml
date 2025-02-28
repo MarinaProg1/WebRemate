@@ -5,6 +5,17 @@
 }
 @model WebRemate.Models.GanadorViewModel
 
-<h2>¡Oferta Ganadora!</h2>
-<p>Nombre del Usuario: @Model.NombreUsuario</p>
-<p>Monto de la Oferta: $@Model.MontoOferta</p>
+<h2 class="text-center">¡Oferta Ganadora!</h2>
+
+
+
+<div class="d-flex justify-content-center" style="min-height: 60vh; align-items: flex-start;">
+<div class="card mb-3" style="max-width: 25rem; text-align: center;">
+    <img src="~/imagenes/CopaUno.png" class="card-img-top" alt="Imagen Copa" style="height: 200px; object-fit: cover;">
+    <div class="d-flex flex-column align-items-center">
+        <h3>@Model.NombreUsuario</h3>
+        <strong>$@Model.MontoOferta</strong> 
+    </div>
+</div>
+</div>
+
