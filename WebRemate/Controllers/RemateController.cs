@@ -55,6 +55,12 @@ namespace WebRemate.Controllers
                 return View("Error");
             }
         }
+        [HttpGet]
+        public async Task<IActionResult> OfertasGanadoras()
+        {
+            var ofertas = await _remateApiService.CalcularOfertasGanadoras();
+            return View(ofertas);
+        }
     }
 }
 

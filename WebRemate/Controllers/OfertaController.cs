@@ -19,7 +19,6 @@ namespace WebRemate.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
-        // Método GET para mostrar el formulario de oferta
         [HttpGet]
         public IActionResult Oferta(int idProducto)
         {
@@ -29,7 +28,7 @@ namespace WebRemate.Controllers
                 return RedirectToAction("Login", "Autenticacion");
             }
 
-            // Decodificar el token para obtener el ID del usuario
+           
             var handler = new JwtSecurityTokenHandler();
             var jwtToken = handler.ReadJwtToken(token);
             var idUsuarioClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
@@ -39,9 +38,6 @@ namespace WebRemate.Controllers
                 return Challenge(); // Redirigir si no se encuentra el claim o el ID no es válido
             }
 
-
-
-            // Crear el modelo con el IdProducto
             var model = new OfertaViewModel
             {
                 IdProducto = idProducto,
@@ -67,7 +63,7 @@ namespace WebRemate.Controllers
                 return RedirectToAction("Login", "Autenticacion");
             }
 
-            // Obtener el IdUsuario desde el token JWT
+           
             var handler = new JwtSecurityTokenHandler();
             var jwtToken = handler.ReadJwtToken(token);
             var idUsuarioClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
@@ -109,15 +105,9 @@ namespace WebRemate.Controllers
 
             }
 
-        [HttpGet]
-        public async Task<IActionResult> SeleccionarGanadora()
-        {
-            // Aquí puedes agregar la lógica que necesites para obtener el estado actual
-            // de las ofertas y productos si es necesario.
-
-            return View();
+       
         }
 
 
     }
-}
+

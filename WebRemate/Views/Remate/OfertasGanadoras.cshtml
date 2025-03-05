@@ -1,0 +1,32 @@
+﻿@model List<OfertaGanadoraViewModel>
+
+<h2>Todas las ofertas Ganadoras</h2>
+
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Usuario</th>
+                <th>Producto</th>
+                <th>Monto</th>
+                <th>Fecha</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var oferta in Model)
+            {
+                <tr>
+                    <td>@oferta.NombreUsuario</td>
+                    <td>@oferta.TituloProducto</td>
+                    <td>$ @oferta.MontoOferta</td>
+                    <td>@oferta.FechaOferta</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No hay ofertas ganadoras.</p>
+}

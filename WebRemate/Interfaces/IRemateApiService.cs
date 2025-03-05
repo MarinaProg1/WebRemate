@@ -8,5 +8,8 @@ namespace WebRemate.Interfaces
         Task<List<RemateViewModels>> ObtenerTodosLosRemates();
         Task<RemateViewModels> ObtenerRematePorId(int idRemate);
         Task<GanadorViewModel> CalcularOfertaGanadoraPorProducto(int idProducto);
-    }
+        Task<List<OfertaGanadoraViewModel>> CalcularOfertasGanadoras();
+
+
+ }
 }

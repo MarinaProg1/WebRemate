@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using WebRemate.Models;
 using WebRemate.Interfaces;
+using System.Net;
 
 namespace WebRemate.Service
 {
@@ -81,6 +82,24 @@ namespace WebRemate.Service
             // Si hay un error interno en el servidor
             throw new Exception($"Error al calcular la oferta ganadora: {response.ReasonPhrase}");
         }
+        public async Task<List<OfertaGanadoraViewModel>> CalcularOfertasGanadoras()
+        {
+            var response = await _httpClient.PostAsync($"{_baseUrl}/remates/calcular-ofertas-ganadoras", null);
 
-    }
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonString = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<List<OfertaGanadoraViewModel>>(jsonString);
+            }
+            else if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                return new List<OfertaGanadoraViewModel>(); // No hubo ofertas ganadoras
+            }
+            else
+            {
+                throw new Exception("Error al calcular ofertas ganadoras");
+            }
+        }
+    
+}
 }
